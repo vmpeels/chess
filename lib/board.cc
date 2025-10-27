@@ -1,10 +1,60 @@
 #include "board.h"
 #include "ij.h"
-// #include "pawn_manager.h"
 #include <cassert>
 #include <sstream>
 
 namespace chess {
+namespace {
+// // Assume cur_location and new_location are inb.
+// bool MovedEnPassant(Piece piece, ij cur_location, ij new_location) {
+//   if (piece.type() != PieceType::PAWN) {
+//     return false;
+//   }
+//   if (piece.color() == PieceColor::UNKNOWN) {
+//     std::cout << "Unknown piece color" << std::endl;
+//     assert(false);
+//   }
+
+//   if (piece.color() == PieceColor::WHITE) {
+//     return cur_location.i == SECOND_RANK_I && new_location.i ==
+//     FOURTH_RANK_I;
+//   } else {
+//     return cur_location.i == SEVENTH_RANK_I && new_location.i ==
+//     FIFTH_RANK_I;
+//   }
+// }
+
+bool MaybeCapturedEnPassant(Piece piece, ij cur_location, ij new_location,
+                            Piece piece_at_new_location) {
+  if (piece.type() != PieceType::PAWN) {
+    return false;
+  }
+  if (piece.color() == PieceColor::UNKNOWN) {
+    std::cout << "Unknown piece color" << std::endl;
+    assert(false);
+  }
+
+  // Capturing en passant means we're capturing an empty square.
+  if (!piece_at_new_location.empty()) {
+    return false;
+  }
+
+  if (piece.color() == PieceColor::WHITE) {
+    // we must have taken, so check that new location is diagonal from
+    // cur_location.
+    ij up_to_left = cur_location + ij{.i = -1, .j = -1};
+    ij up_to_right = cur_location + ij{.i = -1, .j = 1};
+    return new_location == up_to_left || new_location != up_to_right;
+  } else {
+    // we must have taken, so check that new location is diagonal from
+    // cur_location.
+    ij down_to_left = cur_location + ij{.i = 1, .j = -1};
+    ij down_to_right = cur_location + ij{.i = 1, .j = 1};
+    return new_location == down_to_left || new_location != down_to_right;
+  }
+  return false;
+}
+} // namespace
 
 void Board::ErrorIfOob(ij ij) const {
   if (!inb(ij)) {
@@ -55,12 +105,46 @@ bool Board::CanCaptureEnPassant(ij adjacent_square, Piece pawn) const {
 Board::Undo Board::MakeMove(Piece piece, ij cur_location, ij new_location) {
   ErrorIfOob(cur_location);
   ErrorIfOob(new_location);
+  // Reset en_passant every turn.
+  white_en_passant_ = en_passant();
+  black_en_passant_ = en_passant();
+
   Board::Undo undo;
   undo.moved_piece = piece;
   undo.original_piece_location = cur_location;
   undo.new_piece_location = new_location;
-
   Piece piece_at_new_location = GetPiece(new_location);
+
+  // Handle capturing en passant
+  if (MaybeCapturedEnPassant(piece, cur_location, new_location,
+                             piece_at_new_location)) {
+    // Confirm that we captured en passant by checking that the pieces next to
+    // the pawn are also pawns.
+    if (piece.color() == PieceColor::WHITE) {
+      ij up_to_left = cur_location + ij{.i = -1, .j = -1};
+      ij to_left = cur_location + ij{.i = 0, .j = -1};
+
+      // TODO(vmpeels): Replicate this logic for the pawn to the right and the
+      // black case.
+      if (new_location == up_to_left &&
+          GetPiece(to_left).type() == PieceType::PAWN &&
+          GetPiece(to_left).color() != piece.color()) {
+        undo.captured_en_passant = true;
+        undo.captured_en_passant_pawn_location = to_left;
+
+        // Move the capturing pawn
+        board_[cur_location.i][cur_location.j] = Piece();
+        board_[new_location.i][new_location.j] = piece;
+        piece_locations_.ChangePieceLocation(piece, cur_location, new_location);
+
+        // Remove the captured pawn
+        piece_locations_.RemovePiece(GetPiece(to_left), to_left);
+        board_[to_left.i][to_left.j] = Piece();
+      }
+      ij up_to_right = cur_location + ij{.i = -1, .j = 1};
+    }
+  }
+
   undo.piece_at_new_location = GetPiece(new_location);
 
   if (!piece_at_new_location.empty()) {
@@ -71,10 +155,6 @@ Board::Undo Board::MakeMove(Piece piece, ij cur_location, ij new_location) {
   piece_locations_.ChangePieceLocation(piece, cur_location, new_location);
 
   // TODO(vmpeels): maybe i need to do some checking for taking en passant.
-
-  // Reset en passant every turn.
-  white_en_passant_ = en_passant();
-  black_en_passant_ = en_passant();
 
   // Check for en passant. Order matters when resetting and then checking for en
   // passant -- resetting should happen first.

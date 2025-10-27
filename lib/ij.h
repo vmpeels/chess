@@ -14,6 +14,7 @@ struct ij {
   int j = -1;
 
   friend bool operator==(const ij lhs, const ij rhs);
+  friend bool operator!=(const ij lhs, const ij rhs);
 };
 
 // Operators

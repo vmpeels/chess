@@ -18,6 +18,8 @@ bool operator==(const ij lhs, const ij rhs) {
   return lhs.i == rhs.i && lhs.j == rhs.j;
 }
 
+bool operator!=(const ij lhs, const ij rhs) { return !(lhs == rhs); }
+
 ij operator+(const ij lhs, const ij rhs) {
   return {lhs.i + rhs.i, lhs.j + rhs.j};
 }

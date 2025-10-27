@@ -45,6 +45,8 @@ public:
     ij original_piece_location{-1, -1};
     ij new_piece_location{-1, -1};
     Piece piece_at_new_location;
+    bool captured_en_passant = false;
+    ij captured_en_passant_pawn_location{-1, -1};
   };
   Board();
 

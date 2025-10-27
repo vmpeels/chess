@@ -4,6 +4,7 @@ Thoughts that I'm having while I'm working on this project
 
 ## Thoughts
 - Probably would be good to namespace a lot of the things instead of putting everything into the chess namespace. It serves as a method of organization too.
+- Adding UNKNOWN as an enum value is kind of annoying to check for (ex: PieceColor).
 
 ## Questions
 - How is it possible that I'm able to access the board coordinates created in
