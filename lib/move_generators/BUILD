@@ -41,8 +41,8 @@ cc_test(
 
 cc_library(
     name = "rook_move_generator",
-    srcs = ["rook_move_generator.cc"],
-    hdrs = ["rook_move_generator.h"],
+    srcs = ["rook/rook_move_generator.cc"],
+    hdrs = ["rook/rook_move_generator.h"],
     deps = [
         ":move_generator",
         "//lib:board",
@@ -55,7 +55,7 @@ cc_test(
     name = "rook_move_generator_test",
     size = "small",
     srcs = [
-        "rook_move_generator_test.cc",
+        "rook/rook_move_generator_test.cc",
     ],
     deps = [
         ":rook_move_generator",
