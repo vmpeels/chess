@@ -149,8 +149,8 @@ cc_test(
 
 cc_library(
     name = "pawn_move_generator",
-    srcs = ["pawn_move_generator.cc"],
-    hdrs = ["pawn_move_generator.h"],
+    srcs = ["pawn/pawn_move_generator.cc"],
+    hdrs = ["pawn/pawn_move_generator.h"],
     deps = [
         ":move_generator",
         "//lib:board",
@@ -163,7 +163,7 @@ cc_test(
     name = "pawn_move_generator_test",
     size = "small",
     srcs = [
-        "pawn_move_generator_test.cc",
+        "pawn/pawn_move_generator_test.cc",
     ],
     deps = [
         ":pawn_move_generator",
