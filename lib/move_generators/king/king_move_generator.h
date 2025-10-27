@@ -2,8 +2,8 @@
 #define KING_MOVE_GENERATOR_H
 #include "lib/board.h"
 #include "lib/ij.h"
+#include "lib/move_generators/move_generator.h"
 #include "lib/piece.h"
-#include "move_generator.h"
 #include <vector>
 
 namespace chess {

@@ -122,8 +122,8 @@ cc_test(
 
 cc_library(
     name = "king_move_generator",
-    srcs = ["king_move_generator.cc"],
-    hdrs = ["king_move_generator.h"],
+    srcs = ["king/king_move_generator.cc"],
+    hdrs = ["king/king_move_generator.h"],
     deps = [
         ":move_generator",
         "//lib:board",
@@ -136,7 +136,7 @@ cc_test(
     name = "king_move_generator_test",
     size = "small",
     srcs = [
-        "king_move_generator_test.cc",
+        "king/king_move_generator_test.cc",
     ],
     deps = [
         ":king_move_generator",
