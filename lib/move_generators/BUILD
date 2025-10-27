@@ -95,8 +95,8 @@ cc_test(
 
 cc_library(
     name = "queen_move_generator",
-    srcs = ["queen_move_generator.cc"],
-    hdrs = ["queen_move_generator.h"],
+    srcs = ["queen/queen_move_generator.cc"],
+    hdrs = ["queen/queen_move_generator.h"],
     deps = [
         ":move_generator",
         "//lib:board",
@@ -109,7 +109,7 @@ cc_test(
     name = "queen_move_generator_test",
     size = "small",
     srcs = [
-        "queen_move_generator_test.cc",
+        "queen/queen_move_generator_test.cc",
     ],
     deps = [
         ":queen_move_generator",
