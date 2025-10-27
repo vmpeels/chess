@@ -28,7 +28,7 @@ cc_test(
     name = "bishop_move_generator_test",
     size = "small",
     srcs = [
-        "bishop_move_generator_test.cc",
+        "bishop/bishop_move_generator_test.cc",
     ],
     deps = [
         ":bishop_move_generator",
