@@ -68,8 +68,8 @@ cc_test(
 
 cc_library(
     name = "knight_move_generator",
-    srcs = ["knight_move_generator.cc"],
-    hdrs = ["knight_move_generator.h"],
+    srcs = ["knight/knight_move_generator.cc"],
+    hdrs = ["knight/knight_move_generator.h"],
     deps = [
         ":move_generator",
         "//lib:board",
@@ -82,7 +82,7 @@ cc_test(
     name = "knight_move_generator_test",
     size = "small",
     srcs = [
-        "knight_move_generator_test.cc",
+        "knight/knight_move_generator_test.cc",
     ],
     deps = [
         ":knight_move_generator",
