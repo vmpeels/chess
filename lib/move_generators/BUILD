@@ -14,8 +14,8 @@ cc_library(
 
 cc_library(
     name = "bishop_move_generator",
-    srcs = ["bishop_move_generator.cc"],
-    hdrs = ["bishop_move_generator.h"],
+    srcs = ["bishop/bishop_move_generator.cc"],
+    hdrs = ["bishop/bishop_move_generator.h"],
     deps = [
         ":move_generator",
         "//lib:board",
