@@ -1,0 +1,16 @@
+# Hedron's Compile Commands Extractor for Bazel
+# https://github.com/hedronvision/bazel-compile-commands-extractor
+bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+git_override(
+    module_name = "hedron_compile_commands",
+    commit = "d107d9c9025915902fd52346f1c6e18d87f7013a",
+    remote = "https://github.com/hedronvision/bazel-compile-commands-extractor.git",
+    # Replace the commit hash (above) with the latest (https://github.com/hedronvision/bazel-compile-commands-extractor/commits/main).
+    # Even better, set up Renovate and let it do the work for you (see "Suggestion: Updates" in the README).
+)
+
+bazel_dep(name = "rules_cc", version = "0.1.1")
+
+# External dependencies
+bazel_dep(name = "googletest", version = "1.17.0")
+bazel_dep(name = "abseil-cpp", version = "20240116.0")
