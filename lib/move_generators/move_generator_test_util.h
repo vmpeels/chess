@@ -12,7 +12,7 @@ std::vector<move> ConvertToMoves(const std::vector<ij> &ijs,
                                  std::optional<ij> capture = std::nullopt);
 
 std::vector<move> ConvertToMoves(const std::vector<ij> &ijs,
-                                 const std::vector<ij> &capture);
+                                 const std::vector<ij> &captures);
 } // namespace testing
 } // namespace chess
 
