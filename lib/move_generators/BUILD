@@ -186,6 +186,6 @@ test_suite(
         ":knight_move_generator_test",
         ":queen_move_generator_test",
         ":rook_move_generator_test",
-        ":pawn_move_generator",
+        ":pawn_move_generator_test",
     ],
 )
