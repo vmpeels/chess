@@ -72,8 +72,6 @@ LegalMovesFileRankString(const std::vector<chess::ij> &legal_moves) {
 
 int main() {
   std::cout << "welcome to chess!" << std::endl;
-
-  std::cout << "press enter to start a game..." << std::endl;
   std::cin.get();
 
   bool game_over = false;

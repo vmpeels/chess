@@ -60,24 +60,26 @@ bool CanCaptureEnPassant(const Board &board, const Piece pawn, ij pawn_location,
               << std::endl;
     assert(false);
   }
-  if (pawn.color() == PieceColor::WHITE) {
-    if (pawn_location.i != FIFTH_RANK_I) {
-      return false;
-    }
+  if (pawn.color() == PieceColor::WHITE && pawn_location.i != FIFTH_RANK_I) {
+    return false;
+  }
 
-    // The attacking_square is diagonally up from the pawn location, so the
-    // square adjacent to the pawn moves down one square.
-    ij adjacent_square = attacking_square + delta{.i = 1, .j = 0};
-    return board.CanCaptureEnPassant(adjacent_square, pawn);
+  if (pawn.color() == PieceColor::BLACK && pawn_location.i != FOURTH_RANK_I) {
+    return false;
+  }
+
+  // You can capture en passant if there's a pawn horizontally adjacent to the
+  // pawn.
+  return board.CanCaptureEnPassant(
+      pawn_location + delta{.i = 0, .j = attacking_square.j - pawn_location.j},
+      pawn);
+}
+
+bool PawnOnStartingRank(const Piece piece, const ij piece_location) {
+  if (piece.color() == PieceColor::WHITE) {
+    return piece_location.i == SECOND_RANK_I;
   } else {
-    if (pawn_location.i != FOURTH_RANK_I) {
-      return false;
-    }
-
-    // The attacking_square is diagonally down from the pawn location, so the
-    // square adjacent to the pawn moves up one square.
-    ij adjacent_square = attacking_square + delta{.i = -1, .j = 0};
-    return board.CanCaptureEnPassant(adjacent_square, pawn);
+    return piece_location.i == SEVENTH_RANK_I;
   }
 }
 
@@ -91,41 +93,25 @@ std::vector<ij> PawnMoveGenerator::GetPossibleMoves(const Board &board,
 
   // TODO(vmpeels): There is a way to write this generically (if white,
   // multiplier = -1, else multiplier = 1).
-  if (piece.color() == PieceColor::WHITE) {
-    ij up = piece_location + delta{.i = -1, .j = 0};
-    possible_moves.push_back(up);
+  int multiplier = piece.color() == PieceColor::WHITE ? -1 : 1;
+  ij one_square_forward = piece_location + delta{.i = 1 * multiplier, .j = 0};
+  possible_moves.push_back(one_square_forward);
 
-    // En passant.
-    if (piece_location.i == SECOND_RANK_I) {
-      possible_moves.push_back(piece_location + delta{.i = -2, .j = 0});
-    }
+  // En passant.
+  ij two_squares_forward = piece_location + delta{.i = 2 * multiplier, .j = 0};
+  if (PawnOnStartingRank(piece, piece_location)) {
+    possible_moves.push_back(two_squares_forward);
+  }
 
-    std::vector<ij> attacking_squares =
-        GetAttackingSquares(board, piece, piece_location);
-    for (ij square : attacking_squares) {
-      if (board.GetPiece(square).color() == PieceColor::BLACK) {
-        possible_moves.push_back(square);
-      } else if (CanCaptureEnPassant(board, piece, piece_location, square)) {
-        possible_moves.push_back(square);
-      }
-    }
-  } else {
-    ij down = piece_location + delta{.i = 1, .j = 0};
-    possible_moves.push_back(down);
-
-    // En passant.
-    if (piece_location.i == SEVENTH_RANK_I) {
-      possible_moves.push_back(piece_location + delta{.i = 2, .j = 0});
-    }
-
-    std::vector<ij> attacking_squares =
-        GetAttackingSquares(board, piece, piece_location);
-    for (ij square : attacking_squares) {
-      if (board.GetPiece(square).color() == PieceColor::WHITE) {
-        possible_moves.push_back(square);
-      } else if (CanCaptureEnPassant(board, piece, piece_location, square)) {
-        possible_moves.push_back(square);
-      }
+  // Add piece if you can capture them.
+  std::vector<ij> attacking_squares =
+      GetAttackingSquares(board, piece, piece_location);
+  for (ij attacking_square : attacking_squares) {
+    if (board.GetPiece(attacking_square).color() == ~piece.color()) {
+      possible_moves.push_back(attacking_square);
+    } else if (CanCaptureEnPassant(board, piece, piece_location,
+                                   attacking_square)) {
+      possible_moves.push_back(attacking_square);
     }
   }
   return possible_moves;
@@ -135,26 +121,14 @@ std::vector<ij>
 PawnMoveGenerator::GetAttackingSquares(const Board &board, const Piece piece,
                                        const ij piece_location) {
   std::vector<ij> attacking_squares;
-  if (piece.color() == PieceColor::WHITE) {
-    ij up_to_left = piece_location + delta{.i = -1, .j = -1};
-    if (inb(up_to_left)) {
-      attacking_squares.push_back(up_to_left);
-    }
-
-    ij up_to_right = piece_location + delta{.i = -1, .j = 1};
-    if (inb(up_to_right)) {
-      attacking_squares.push_back(up_to_right);
-    }
-  } else if (piece.color() == PieceColor::BLACK) {
-    ij down_to_left = piece_location + delta{.i = 1, .j = -1};
-    if (inb(down_to_left)) {
-      attacking_squares.push_back(down_to_left);
-    }
-
-    ij down_to_right = piece_location + delta{.i = 1, .j = 1};
-    if (inb(down_to_right)) {
-      attacking_squares.push_back(down_to_right);
-    }
+  int multiplier = piece.color() == PieceColor::WHITE ? -1 : 1;
+  ij to_left = piece_location + delta{.i = 1 * multiplier, .j = -1};
+  ij to_right = piece_location + delta{.i = 1 * multiplier, .j = 1};
+  if (inb(to_left)) {
+    attacking_squares.push_back(to_left);
+  }
+  if (inb(to_right)) {
+    attacking_squares.push_back(to_right);
   }
   return attacking_squares;
 }
