@@ -51,6 +51,10 @@ bool ValidPieceFormat(std::string piece) {
   return true;
 }
 
+bool ValidMove(const std::string &move) {
+  return chess::ValidFileChar(move[0]) && chess::ValidRankChar(move[1]);
+}
+
 std::string
 LegalMovesFileRankString(const std::vector<chess::ij> &legal_moves) {
   std::string legal_move_filerank_string = "{";
@@ -117,6 +121,22 @@ int main() {
       std::string fileranks;
       std::cout << "Please select a move from the list of valid moves: "
                 << LegalMovesFileRankString(legal_moves) << std::endl;
+      bool received_valid_move_or_quit = false;
+      std::string move_str;
+      while (!received_valid_move_or_quit) {
+        getline(std::cin, move_str);
+        if (move_str == "q") {
+          received_valid_move_or_quit = true;
+        } else if (!ValidMove(move_str)) {
+          std::cout << "enter a valid move or type q to exit" << std::endl;
+        } else {
+          received_valid_move_or_quit = true;
+        }
+      }
+
+      chess::ij get_move_ij = chess::FrToIj(move_str);
+      board.MakeMove(piece, piece_location, get_move_ij);
+      made_move = true;
     }
 
     // Type a piece to move. Format = <piece symbol><file><rank>. EX: ra2 == The
