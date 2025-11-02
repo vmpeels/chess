@@ -22,6 +22,8 @@ bool inb(ij ij);
 std::ostream &operator<<(std::ostream &os, ij ij);
 ij operator+(const ij lhs, const ij rhs);
 std::string ToFr(ij ij);
+ij FrToIj(const std::string &fr);
+ij FrToIj(char file, char rank);
 
 } // namespace chess
 

@@ -52,4 +52,6 @@ std::vector<ij> MoveManager::GetLegalMoves(Board &board, Piece piece,
   return legal_moves;
 }
 
+bool MoveManager::KingInCheck() { return false; }
+
 } // namespace chess

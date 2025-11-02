@@ -31,4 +31,25 @@ std::string ToFr(ij ij) {
   return out;
 }
 
+ij FrToIj(const std::string &fr) {
+  if (fr.size() != 2) {
+    std::cout << "error converting filerank to ij, fr not 2 chars" << std::endl;
+    assert(false);
+  }
+
+  if (!ValidFileChar(fr[0])) {
+    std::cout << "error converting filerank to ij, file not valid" << std::endl;
+    assert(false);
+  }
+
+  if (!ValidRankChar(fr[1])) {
+    std::cout << "error converting filerank to ij, rank not valid" << std::endl;
+    assert(false);
+  }
+
+  return FrToIj(fr[0], fr[1]);
+}
+
+ij FrToIj(char file, char rank) { return {.i = '8' - rank, .j = file - 'a'}; }
+
 } // namespace chess

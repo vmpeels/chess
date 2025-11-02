@@ -21,6 +21,9 @@ constexpr char SYMBOL_EMPTY = '_';
 constexpr std::array<char, 6> PIECE_SYMBOLS = {SYMBOL_PAWN,   SYMBOL_KNIGHT,
                                                SYMBOL_BISHOP, SYMBOL_ROOK,
                                                SYMBOL_QUEEN,  SYMBOL_KING};
+constexpr bool ValidPieceSymbol(char c) {
+  return std::find(PIECE_SYMBOLS.begin(), PIECE_SYMBOLS.end(), c);
+}
 
 constexpr std::string_view NAME_PAWN = "PAWN";
 constexpr std::string_view NAME_KNIGHT = "KNIGHT";
@@ -62,15 +65,18 @@ constexpr char G_FILE = 'g';
 constexpr char H_FILE = 'h';
 constexpr std::array<char, NUM_FILES> FILES = {A_FILE, B_FILE, C_FILE, D_FILE,
                                                E_FILE, F_FILE, G_FILE, H_FILE};
+constexpr bool ValidFileChar(char c) {
+  return std::find(FILES.begin(), FILES.end(), c);
+}
 
-constexpr char A_FILE_J = 0;
-constexpr char B_FILE_J = 1;
-constexpr char C_FILE_J = 2;
-constexpr char D_FILE_J = 3;
-constexpr char E_FILE_J = 4;
-constexpr char F_FILE_J = 5;
-constexpr char G_FILE_J = 6;
-constexpr char H_FILE_J = 7;
+constexpr int A_FILE_J = 0;
+constexpr int B_FILE_J = 1;
+constexpr int C_FILE_J = 2;
+constexpr int D_FILE_J = 3;
+constexpr int E_FILE_J = 4;
+constexpr int F_FILE_J = 5;
+constexpr int G_FILE_J = 6;
+constexpr int H_FILE_J = 7;
 
 constexpr int NUM_RANKS = 8;
 constexpr char FIRST_RANK = '1';
@@ -84,6 +90,9 @@ constexpr char EIGHTH_RANK = '8';
 constexpr std::array<char, NUM_RANKS> RANKS = {
     FIRST_RANK, SECOND_RANK, THIRD_RANK,   FOURTH_RANK,
     FIFTH_RANK, SIXTH_RANK,  SEVENTH_RANK, EIGHTH_RANK};
+constexpr bool ValidRankChar(char c) {
+  return std::find(RANKS.begin(), RANKS.end(), c);
+}
 
 constexpr int FIRST_RANK_I = 7;
 constexpr int SECOND_RANK_I = 6;
