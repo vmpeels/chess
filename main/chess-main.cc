@@ -86,8 +86,6 @@ int main() {
     std::cout << board << std::endl;
     std::cout << '\n';
 
-    // TODO(ryan)
-    // Move picker loop.
     bool made_move = false;
     while (!made_move) {
       std::cout << "Type a piece to move: ";
