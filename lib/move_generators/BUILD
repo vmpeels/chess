@@ -1,6 +1,10 @@
 load("@rules_cc//cc:cc_library.bzl", "cc_library")
 load("@rules_cc//cc:cc_test.bzl", "cc_test")
 
+# TODO(vmpeels): Perhaps make our visibility rules better... does this whole
+# thing really need to be public?
+package(default_visibility = ["//visibility:public"])
+
 cc_library(
     name = "move_generator",
     srcs = ["move_generator.cc"],
@@ -182,5 +186,6 @@ test_suite(
         ":knight_move_generator_test",
         ":queen_move_generator_test",
         ":rook_move_generator_test",
+        ":pawn_move_generator",
     ],
 )

@@ -1,6 +1,6 @@
 load("@rules_cc//cc:cc_library.bzl", "cc_library")
 
-# TODO(varunm): Perhaps make our visibility rules better... does this whole
+# TODO(vmpeels): Perhaps make our visibility rules better... does this whole
 # thing really need to be public?
 package(default_visibility = ["//visibility:public"])
 
@@ -80,6 +80,27 @@ cc_library(
 )
 
 cc_library(
+    name = "move_manager",
+    srcs = [
+        "move_manager.cc",
+    ],
+    hdrs = [
+        "move_manager.h",
+    ],
+    deps = [
+        ":board",
+        ":ij",
+        ":piece",
+        "//lib/move_generators:bishop_move_generator",
+        "//lib/move_generators:king_move_generator",
+        "//lib/move_generators:knight_move_generator",
+        "//lib/move_generators:pawn_move_generator",
+        "//lib/move_generators:rook_move_generator",
+        "//lib/move_generators:queen_move_generator",
+    ]
+)
+
+cc_library(
     name = "chess-lib",
     hdrs = [
         "board.h",
@@ -89,5 +110,7 @@ cc_library(
         ":board_coordinates",
         ":constants",
         ":piece",
+        ":ij",
+        ":move_manager",
     ],
 )

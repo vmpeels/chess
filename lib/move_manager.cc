@@ -1,11 +1,11 @@
 #include "move_manager.h"
 #include "ij.h"
-#include "move_generators/bishop_move_generator.h"
-#include "move_generators/king_move_generator.h"
-#include "move_generators/knight_move_generator.h"
+#include "move_generators/bishop/bishop_move_generator.h"
+#include "move_generators/king/king_move_generator.h"
+#include "move_generators/knight/knight_move_generator.h"
 #include "move_generators/move_generator.h"
-#include "move_generators/queen_move_generator.h"
-#include "move_generators/rook_move_generator.h"
+#include "move_generators/queen/queen_move_generator.h"
+#include "move_generators/rook/rook_move_generator.h"
 #include <memory>
 #include <vector>
 
