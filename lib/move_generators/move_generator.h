@@ -19,6 +19,7 @@ public:
 
   virtual std::vector<ij> GetAttackingSquares(const Board &board, Piece piece,
                                               ij piece_location);
+  virtual ~MoveGenerator() = default;
 
 protected:
   std::vector<ij> ExtendUsingDelta(const Board &board, PieceColor piece_color,
