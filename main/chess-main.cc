@@ -28,7 +28,7 @@ std::string WhoToPlay(Turn turn) {
   case Turn::WHITE:
     return "     == White to play ==    ";
   case Turn::BLACK:
-    return "== Black to play ==";
+    return "     == Black to play ==";
   }
 }
 
@@ -183,12 +183,7 @@ int main() {
       chess::move my_move = StrToMove(move_str);
       board.MakeMove(piece, piece_location, my_move);
       made_move = true;
+      cur_turn = FlipTurn(cur_turn);
     }
-
-    // Type a piece to move. Format = <piece symbol><file><rank>. EX: ra2 == The
-    // rook on A2.
-    //
-    // Program lists all possible moves. Type the move you want to
-    // move the rook to. Confirm move. Make move.
   }
 }
