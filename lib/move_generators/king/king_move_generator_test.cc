@@ -3,6 +3,8 @@
 
 #include "king_move_generator.h"
 #include "lib/board.h"
+#include "lib/move.h"
+#include "lib/move_generators/move_generator_test_util.h"
 #include "lib/piece.h"
 
 namespace chess {
@@ -16,13 +18,13 @@ TEST(KingMoveGeneratorTest, GetPossibleMovesDefault) {
   Piece king(PieceType::KING, PieceColor::WHITE, location);
   board.PlacePiece(king, location);
 
-  std::vector<ij> expected_possible_moves = {
+  std::vector<move> expected_possible_moves = testing::ConvertToMoves({
       C5, D5, E5, // above the king
       C4, E4,     // same as king
       C3, D3, E3  // below king
-  };
+  });
   KingMoveGenerator king_move_generator;
-  std::vector<ij> possible_moves =
+  std::vector<move> possible_moves =
       king_move_generator.GetPossibleMoves(board, king, location);
   EXPECT_THAT(possible_moves,
               UnorderedElementsAreArray(expected_possible_moves));
@@ -37,13 +39,15 @@ TEST(KingMoveGeneratorTest,
 
   board.PlacePiece(Piece(PieceType::PAWN, PieceColor::BLACK, C5), C5);
 
-  std::vector<ij> expected_possible_moves = {
-      C5, D5, E5, // above the king
-      C4, E4,     // same as king
-      C3, D3, E3  // below king
-  };
+  std::vector<move> expected_possible_moves = testing::ConvertToMoves(
+      {
+          C5, D5, E5, // above the king
+          C4, E4,     // same as king
+          C3, D3, E3  // below king
+      },
+      C5);
   KingMoveGenerator king_move_generator;
-  std::vector<ij> possible_moves =
+  std::vector<move> possible_moves =
       king_move_generator.GetPossibleMoves(board, king, location);
   EXPECT_THAT(possible_moves,
               UnorderedElementsAreArray(expected_possible_moves));
@@ -58,13 +62,13 @@ TEST(KingMoveGeneratorTest,
 
   board.PlacePiece(Piece(PieceType::PAWN, PieceColor::WHITE, C5), C5);
 
-  std::vector<ij> expected_possible_moves = {
+  std::vector<move> expected_possible_moves = testing::ConvertToMoves({
       D5, E5,    // above the king
       C4, E4,    // same as king
       C3, D3, E3 // below king
-  };
+  });
   KingMoveGenerator king_move_generator;
-  std::vector<ij> possible_moves =
+  std::vector<move> possible_moves =
       king_move_generator.GetPossibleMoves(board, king, location);
   EXPECT_THAT(possible_moves,
               UnorderedElementsAreArray(expected_possible_moves));
@@ -76,9 +80,10 @@ TEST(KingMoveGeneratorTest, GetPossibleMovesEdgeOfBoard) {
   Piece king(PieceType::KING, PieceColor::WHITE, location);
   board.PlacePiece(king, location);
 
-  std::vector<ij> expected_possible_moves = {A2, B2, B1};
+  std::vector<move> expected_possible_moves =
+      testing::ConvertToMoves({A2, B2, B1});
   KingMoveGenerator king_move_generator;
-  std::vector<ij> possible_moves =
+  std::vector<move> possible_moves =
       king_move_generator.GetPossibleMoves(board, king, location);
   EXPECT_THAT(possible_moves,
               UnorderedElementsAreArray(expected_possible_moves));

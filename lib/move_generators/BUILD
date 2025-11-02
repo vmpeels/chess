@@ -12,7 +12,23 @@ cc_library(
     deps = [
         "//lib:board",
         "//lib:board_coordinates",
+        "//lib:ij",
+        "//lib:move",
         "//lib:piece",
+    ],
+)
+
+cc_library(
+    name = "move_generator_test_util",
+    srcs = [
+        "move_generator_test_util.cc",
+    ],
+    hdrs = [
+        "move_generator_test_util.h",
+    ],
+    deps = [
+        "//lib:ij",
+        "//lib:move",
     ],
 )
 
@@ -24,6 +40,7 @@ cc_library(
         ":move_generator",
         "//lib:board",
         "//lib:board_coordinates",
+        "//lib:move",
         "//lib:piece",
     ],
 )
@@ -36,7 +53,9 @@ cc_test(
     ],
     deps = [
         ":bishop_move_generator",
+        ":move_generator_test_util",
         "//lib:board",
+        "//lib:move",
         "//lib:piece",
         "@googletest//:gtest",
         "@googletest//:gtest_main",
@@ -62,6 +81,7 @@ cc_test(
         "rook/rook_move_generator_test.cc",
     ],
     deps = [
+        ":move_generator_test_util",
         ":rook_move_generator",
         "//lib:board",
         "//lib:piece",
@@ -90,6 +110,7 @@ cc_test(
     ],
     deps = [
         ":knight_move_generator",
+        ":move_generator_test_util",
         "//lib:board",
         "//lib:piece",
         "@googletest//:gtest",
@@ -116,6 +137,7 @@ cc_test(
         "queen/queen_move_generator_test.cc",
     ],
     deps = [
+        ":move_generator_test_util",
         ":queen_move_generator",
         "//lib:board",
         "//lib:piece",
@@ -144,6 +166,7 @@ cc_test(
     ],
     deps = [
         ":king_move_generator",
+        ":move_generator_test_util",
         "//lib:board",
         "//lib:piece",
         "@googletest//:gtest",
@@ -157,6 +180,7 @@ cc_library(
     hdrs = ["pawn/pawn_move_generator.h"],
     deps = [
         ":move_generator",
+        ":move_generator_test_util",
         "//lib:board",
         "//lib:board_coordinates",
         "//lib:piece",
@@ -184,8 +208,8 @@ test_suite(
         ":bishop_move_generator_test",
         ":king_move_generator_test",
         ":knight_move_generator_test",
+        ":pawn_move_generator_test",
         ":queen_move_generator_test",
         ":rook_move_generator_test",
-        ":pawn_move_generator_test",
     ],
 )

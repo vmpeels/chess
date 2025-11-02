@@ -80,6 +80,19 @@ cc_library(
 )
 
 cc_library(
+    name = "move",
+    srcs = [
+        "move.cc",
+    ],
+    hdrs = [
+        "move.h",
+    ],
+    deps = [
+        ":ij",
+    ]
+)
+
+cc_library(
     name = "move_manager",
     srcs = [
         "move_manager.cc",
