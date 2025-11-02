@@ -18,12 +18,14 @@ constexpr char SYMBOL_ROOK = 'r';
 constexpr char SYMBOL_QUEEN = 'q';
 constexpr char SYMBOL_KING = 'k';
 constexpr char SYMBOL_EMPTY = '_';
+constexpr char SYMBOL_CAPTURE = 'x';
 constexpr std::array<char, 6> PIECE_SYMBOLS = {SYMBOL_PAWN,   SYMBOL_KNIGHT,
                                                SYMBOL_BISHOP, SYMBOL_ROOK,
                                                SYMBOL_QUEEN,  SYMBOL_KING};
 constexpr bool ValidPieceSymbol(char c) {
   return std::find(PIECE_SYMBOLS.begin(), PIECE_SYMBOLS.end(), c);
 }
+constexpr bool IsCaptureSymbol(char c) { return c == SYMBOL_CAPTURE; }
 
 constexpr std::string_view NAME_PAWN = "PAWN";
 constexpr std::string_view NAME_KNIGHT = "KNIGHT";

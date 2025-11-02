@@ -2,6 +2,7 @@
 #define BOARD_H
 
 #include "board_coordinates.h"
+#include "move.h"
 #include "piece.h"
 #include "piece_manager.h"
 #include <vector>
@@ -56,7 +57,7 @@ public:
 
   // Moves a piece to a new location. Takes the piece at the new_location if
   // there is a piece of opposite color there (and it's not the king.)
-  Undo MakeMove(Piece piece, ij cur_location, ij new_location);
+  Undo MakeMove(Piece piece, ij cur_location, move move);
 
   // Undoes a move.
   void UndoMove(Undo undo);

@@ -3,6 +3,7 @@
 
 #include "board.h"
 #include "ij.h"
+#include "move.h"
 #include "piece.h"
 #include <vector>
 
@@ -12,7 +13,7 @@ class MoveManager {
 public:
   bool KingInCheck();
 
-  std::vector<ij> GetLegalMoves(Board &board, Piece piece, ij location);
+  std::vector<move> GetLegalMoves(Board &board, Piece piece, ij location);
 };
 } // namespace chess
 #endif

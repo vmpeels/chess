@@ -102,9 +102,9 @@ bool Board::CanCaptureEnPassant(ij adjacent_square, Piece pawn) const {
   return false;
 }
 
-Board::Undo Board::MakeMove(Piece piece, ij cur_location, ij new_location) {
+Board::Undo Board::MakeMove(Piece piece, ij cur_location, move move) {
   ErrorIfOob(cur_location);
-  ErrorIfOob(new_location);
+  ErrorIfOob(move.loc);
   // Reset en_passant every turn.
   white_en_passant_ = en_passant();
   black_en_passant_ = en_passant();
@@ -112,11 +112,11 @@ Board::Undo Board::MakeMove(Piece piece, ij cur_location, ij new_location) {
   Board::Undo undo;
   undo.moved_piece = piece;
   undo.original_piece_location = cur_location;
-  undo.new_piece_location = new_location;
-  Piece piece_at_new_location = GetPiece(new_location);
+  undo.new_piece_location = move.loc;
+  Piece piece_at_new_location = GetPiece(move.loc);
 
   // Handle capturing en passant
-  if (MaybeCapturedEnPassant(piece, cur_location, new_location,
+  if (MaybeCapturedEnPassant(piece, cur_location, move.loc,
                              piece_at_new_location)) {
     // Confirm that we captured en passant by checking that the pieces next to
     // the pawn are also pawns.
@@ -126,7 +126,7 @@ Board::Undo Board::MakeMove(Piece piece, ij cur_location, ij new_location) {
 
       // TODO(vmpeels): Replicate this logic for the pawn to the right and the
       // black case.
-      if (new_location == up_to_left &&
+      if (move.loc == up_to_left &&
           GetPiece(to_left).type() == PieceType::PAWN &&
           GetPiece(to_left).color() != piece.color()) {
         undo.captured_en_passant = true;
@@ -134,8 +134,8 @@ Board::Undo Board::MakeMove(Piece piece, ij cur_location, ij new_location) {
 
         // Move the capturing pawn
         board_[cur_location.i][cur_location.j] = Piece();
-        board_[new_location.i][new_location.j] = piece;
-        piece_locations_.ChangePieceLocation(piece, cur_location, new_location);
+        board_[move.loc.i][move.loc.j] = piece;
+        piece_locations_.ChangePieceLocation(piece, cur_location, move.loc);
 
         // Remove the captured pawn
         piece_locations_.RemovePiece(GetPiece(to_left), to_left);
@@ -145,14 +145,14 @@ Board::Undo Board::MakeMove(Piece piece, ij cur_location, ij new_location) {
     }
   }
 
-  undo.piece_at_new_location = GetPiece(new_location);
+  undo.piece_at_new_location = GetPiece(move.loc);
 
   if (!piece_at_new_location.empty()) {
-    piece_locations_.RemovePiece(piece_at_new_location, new_location);
+    piece_locations_.RemovePiece(piece_at_new_location, move.loc);
   }
   board_[cur_location.i][cur_location.j] = Piece();
-  board_[new_location.i][new_location.j] = piece;
-  piece_locations_.ChangePieceLocation(piece, cur_location, new_location);
+  board_[move.loc.i][move.loc.j] = piece;
+  piece_locations_.ChangePieceLocation(piece, cur_location, move.loc);
 
   // TODO(vmpeels): maybe i need to do some checking for taking en passant.
 
@@ -160,16 +160,16 @@ Board::Undo Board::MakeMove(Piece piece, ij cur_location, ij new_location) {
   // passant -- resetting should happen first.
   if (piece.type() == PieceType::PAWN) {
     if (piece.color() == PieceColor::WHITE) {
-      if (cur_location.i == SECOND_RANK_I && new_location.i == FOURTH_RANK_I) {
+      if (cur_location.i == SECOND_RANK_I && move.loc.i == FOURTH_RANK_I) {
         white_en_passant_.moved_en_passant_last_turn = true;
         white_en_passant_.pawn = piece;
-        white_en_passant_.location = new_location;
+        white_en_passant_.location = move.loc;
       }
     } else if (piece.color() == PieceColor::BLACK) {
-      if (cur_location.i == SEVENTH_RANK_I && new_location.i == FIFTH_RANK_I) {
+      if (cur_location.i == SEVENTH_RANK_I && move.loc.i == FIFTH_RANK_I) {
         black_en_passant_.moved_en_passant_last_turn = true;
         black_en_passant_.pawn = piece;
-        black_en_passant_.location = new_location;
+        black_en_passant_.location = move.loc;
       }
     }
   }

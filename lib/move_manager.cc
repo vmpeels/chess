@@ -1,5 +1,6 @@
 #include "move_manager.h"
 #include "ij.h"
+#include "move.h"
 #include "move_generators/bishop/bishop_move_generator.h"
 #include "move_generators/king/king_move_generator.h"
 #include "move_generators/knight/knight_move_generator.h"
@@ -34,14 +35,14 @@ std::unique_ptr<MoveGenerator> GetMoveGenerator(PieceType piece_type) {
 }
 } // namespace
 
-std::vector<ij> MoveManager::GetLegalMoves(Board &board, Piece piece,
-                                           ij location) {
-  std::vector<ij> possible_moves =
+std::vector<move> MoveManager::GetLegalMoves(Board &board, Piece piece,
+                                             ij location) {
+  std::vector<move> possible_moves =
       GetMoveGenerator(piece.type())->GetPossibleMoves(board, piece, location);
 
   // For each move, check if making the move would put your king in check.
-  std::vector<ij> legal_moves;
-  for (const ij move : possible_moves) {
+  std::vector<move> legal_moves;
+  for (const move move : possible_moves) {
     Board::Undo undo = board.MakeMove(piece, location, move);
     if (!KingInCheck()) {
       legal_moves.push_back(move);

@@ -16,6 +16,7 @@ cc_library(
         ":board_coordinates",
         ":constants",
         ":ij",
+        ":move",
         ":piece",
         ":piece_manager",
     ],
@@ -36,10 +37,10 @@ cc_library(
     srcs = ["piece_manager.cc"],
     hdrs = ["piece_manager.h"],
     deps = [
-      ":ij",
-      ":piece",
-      "@abseil-cpp//absl/container:flat_hash_map",
-    ]
+        ":ij",
+        ":piece",
+        "@abseil-cpp//absl/container:flat_hash_map",
+    ],
 )
 
 cc_library(
@@ -89,7 +90,7 @@ cc_library(
     ],
     deps = [
         ":ij",
-    ]
+    ],
 )
 
 cc_library(
@@ -103,14 +104,15 @@ cc_library(
     deps = [
         ":board",
         ":ij",
+        ":move",
         ":piece",
         "//lib/move_generators:bishop_move_generator",
         "//lib/move_generators:king_move_generator",
         "//lib/move_generators:knight_move_generator",
         "//lib/move_generators:pawn_move_generator",
-        "//lib/move_generators:rook_move_generator",
         "//lib/move_generators:queen_move_generator",
-    ]
+        "//lib/move_generators:rook_move_generator",
+    ],
 )
 
 cc_library(
@@ -122,8 +124,8 @@ cc_library(
         ":board",
         ":board_coordinates",
         ":constants",
-        ":piece",
         ":ij",
         ":move_manager",
+        ":piece",
     ],
 )

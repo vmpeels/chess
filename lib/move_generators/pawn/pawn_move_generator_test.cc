@@ -186,7 +186,7 @@ TEST(PawnMoveGeneratorTest,
   // Now place the black pawn on its starting location, then move it en passant.
   Piece black_pawn(PieceType::PAWN, PieceColor::BLACK, C7);
   board.PlacePiece(black_pawn, C7);
-  board.MakeMove(black_pawn, C7, C5);
+  board.MakeMove(black_pawn, C7, {.loc = C5, .capture = false});
 
   std::vector<move> expected_possible_moves = testing::ConvertToMoves(
       {
@@ -211,7 +211,7 @@ TEST(PawnMoveGeneratorTest,
   // Now place the white pawn on its starting location, then move it en passant.
   Piece white_pawn(PieceType::PAWN, PieceColor::WHITE, C2);
   board.PlacePiece(white_pawn, C2);
-  board.MakeMove(white_pawn, C2, C4);
+  board.MakeMove(white_pawn, C2, {.loc = C4, .capture = false});
 
   std::vector<move> expected_possible_moves = testing::ConvertToMoves(
       {

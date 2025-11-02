@@ -52,16 +52,65 @@ bool ValidPieceFormat(std::string piece) {
 }
 
 bool ValidMove(const std::string &move) {
-  return chess::ValidFileChar(move[0]) && chess::ValidRankChar(move[1]);
+  if (move.length() != 3 && move.length() != 4) {
+    std::cout << "here1" << std::endl;
+    return false;
+  }
+  char piece_symbol = move[0];
+  if (!chess::ValidPieceSymbol(piece_symbol)) {
+    std::cout << "here2" << std::endl;
+
+    return false;
+  }
+
+  char file;
+  char rank;
+  if (move.length() == 3) {
+    file = move[1];
+    rank = move[2];
+  } else {
+    if (!chess::IsCaptureSymbol(move[1])) {
+      std::cout << "here3" << std::endl;
+
+      return false;
+    }
+    file = move[2];
+    rank = move[3];
+  }
+  std::cout << "here4" << std::endl;
+  return chess::ValidFileChar(file) && chess::ValidRankChar(rank);
+}
+
+chess::move StrToMove(const std::string &my_move) {
+  if (!ValidMove(my_move)) {
+    std::cout << "error converting string to move for move: " << my_move
+              << std::endl;
+    assert(false);
+  }
+  char file;
+  char rank;
+  if (my_move.length() == 3) {
+    file = my_move[1];
+    rank = my_move[2];
+  } else {
+    file = my_move[2];
+    rank = my_move[3];
+  }
+  return {.loc = chess::FrToIj(file, rank), .capture = my_move.length() == 4};
 }
 
 std::string
-LegalMovesFileRankString(const std::vector<chess::ij> &legal_moves) {
+LegalMovesFileRankString(const std::vector<chess::move> &legal_moves,
+                         char piece_symbol) {
   std::string legal_move_filerank_string = "{";
   std::string separator = "";
 
   for (int i = 0; i < legal_moves.size(); ++i) {
-    legal_move_filerank_string += chess::ToFr(legal_moves[i]);
+    legal_move_filerank_string += piece_symbol;
+    if (legal_moves[i].capture) {
+      legal_move_filerank_string += 'x';
+    }
+    legal_move_filerank_string += chess::ToFr(legal_moves[i].loc);
     if (i != legal_moves.size() - 1) {
       legal_move_filerank_string += ",";
     }
@@ -112,11 +161,12 @@ int main() {
       }
 
       chess::MoveManager move_manager;
-      std::vector<chess::ij> legal_moves =
+      std::vector<chess::move> legal_moves =
           move_manager.GetLegalMoves(board, piece, piece_location);
       std::string fileranks;
       std::cout << "Please select a move from the list of valid moves: "
-                << LegalMovesFileRankString(legal_moves) << std::endl;
+                << LegalMovesFileRankString(legal_moves, piece.symbol())
+                << std::endl;
       bool received_valid_move_or_quit = false;
       std::string move_str;
       while (!received_valid_move_or_quit) {
@@ -130,8 +180,8 @@ int main() {
         }
       }
 
-      chess::ij get_move_ij = chess::FrToIj(move_str);
-      board.MakeMove(piece, piece_location, get_move_ij);
+      chess::move my_move = StrToMove(move_str);
+      board.MakeMove(piece, piece_location, my_move);
       made_move = true;
     }
 
