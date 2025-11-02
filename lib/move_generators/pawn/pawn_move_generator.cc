@@ -70,7 +70,9 @@ std::vector<move> PawnMoveGenerator::GetPossibleMoves(const Board &board,
                                    attacking_square)) {
       // We have to manually set the capture field to true here since the
       // location on the board will be empty.
-      possible_moves.push_back({.loc = attacking_square.loc, .capture = true});
+      possible_moves.push_back({.loc = attacking_square.loc,
+                                .capture = true,
+                                .en_passant_capture = true});
     }
   }
   return possible_moves;

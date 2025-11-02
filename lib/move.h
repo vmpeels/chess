@@ -7,6 +7,7 @@ namespace chess {
 struct move {
   ij loc;
   bool capture;
+  bool en_passant_capture;
   friend bool operator==(const move lhs, const move rhs);
   friend bool operator!=(const move lhs, const move rhs);
 };

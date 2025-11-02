@@ -2,7 +2,8 @@
 
 namespace chess {
 bool operator==(const move lhs, const move rhs) {
-  return lhs.loc == rhs.loc && lhs.capture == rhs.capture;
+  return lhs.loc == rhs.loc && lhs.capture == rhs.capture &&
+         lhs.en_passant_capture == rhs.en_passant_capture;
 }
 
 bool operator!=(const move lhs, const move rhs) { return !(lhs == rhs); }

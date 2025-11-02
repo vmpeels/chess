@@ -188,12 +188,9 @@ TEST(PawnMoveGeneratorTest,
   board.PlacePiece(black_pawn, C7);
   board.MakeMove(black_pawn, C7, {.loc = C5, .capture = false});
 
-  std::vector<move> expected_possible_moves = testing::ConvertToMoves(
-      {
-          D6, // Default move
-          C6, // Capture En Passant.
-      },
-      C6);
+  std::vector<move> expected_possible_moves = {
+      {.loc = D6, .capture = false, .en_passant_capture = false},
+      {.loc = C6, .capture = true, .en_passant_capture = true}};
   PawnMoveGenerator pawn_move_generator;
   std::vector<move> possible_moves =
       pawn_move_generator.GetPossibleMoves(board, white_pawn, start_location);
@@ -213,12 +210,9 @@ TEST(PawnMoveGeneratorTest,
   board.PlacePiece(white_pawn, C2);
   board.MakeMove(white_pawn, C2, {.loc = C4, .capture = false});
 
-  std::vector<move> expected_possible_moves = testing::ConvertToMoves(
-      {
-          D3, // Default move
-          C3, // Capture En Passant.
-      },
-      C3);
+  std::vector<move> expected_possible_moves = {
+      {.loc = D3, .capture = false, .en_passant_capture = false},
+      {.loc = C3, .capture = true, .en_passant_capture = true}};
   PawnMoveGenerator pawn_move_generator;
   std::vector<move> possible_moves =
       pawn_move_generator.GetPossibleMoves(board, black_pawn, start_location);
