@@ -202,6 +202,22 @@ cc_test(
     ],
 )
 
+cc_library(
+    name = "move_generator_dispatch",
+    srcs = ["move_generator_dispatch.cc"],
+    hdrs = ["move_generator_dispatch.h"],
+    deps = [
+        ":bishop_move_generator",
+        ":king_move_generator",
+        ":knight_move_generator",
+        ":move_generator",
+        ":pawn_move_generator",
+        ":queen_move_generator",
+        ":rook_move_generator",
+        "//lib:constants",
+    ],
+)
+
 test_suite(
     name = "move_generator_tests",
     tests = [

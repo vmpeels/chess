@@ -71,10 +71,11 @@ public:
   // Adds the default position of the chess board.
   void ArrangePieces();
 
-  // bool MovedEnPassantLastTurn(Piece adjacent_piece,
-  //                             PieceColor adjacent_piece_color) const;
-
   bool CanCaptureEnPassant(ij adjacent_square, Piece pawn) const;
+
+  ij GetKingLocation(PieceColor color);
+
+  std::vector<ij> GetPieceLocations(PieceColor color);
 
   friend std::ostream &operator<<(std::ostream &os, const Board &board);
 };

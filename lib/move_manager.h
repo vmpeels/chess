@@ -11,9 +11,8 @@ namespace chess {
 
 class MoveManager {
 public:
-  bool KingInCheck();
-
   std::vector<move> GetLegalMoves(Board &board, Piece piece, ij location);
+  bool KingInCheck(Board &board, PieceColor king_color);
 };
 } // namespace chess
 #endif

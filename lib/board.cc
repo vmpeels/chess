@@ -4,57 +4,6 @@
 #include <sstream>
 
 namespace chess {
-namespace {
-// // Assume cur_location and new_location are inb.
-// bool MovedEnPassant(Piece piece, ij cur_location, ij new_location) {
-//   if (piece.type() != PieceType::PAWN) {
-//     return false;
-//   }
-//   if (piece.color() == PieceColor::UNKNOWN) {
-//     std::cout << "Unknown piece color" << std::endl;
-//     assert(false);
-//   }
-
-//   if (piece.color() == PieceColor::WHITE) {
-//     return cur_location.i == SECOND_RANK_I && new_location.i ==
-//     FOURTH_RANK_I;
-//   } else {
-//     return cur_location.i == SEVENTH_RANK_I && new_location.i ==
-//     FIFTH_RANK_I;
-//   }
-// }
-
-bool MaybeCapturedEnPassant(Piece piece, ij cur_location, ij new_location,
-                            Piece piece_at_new_location) {
-  if (piece.type() != PieceType::PAWN) {
-    return false;
-  }
-  if (piece.color() == PieceColor::UNKNOWN) {
-    std::cout << "Unknown piece color" << std::endl;
-    assert(false);
-  }
-
-  // Capturing en passant means we're capturing an empty square.
-  if (!piece_at_new_location.empty()) {
-    return false;
-  }
-
-  if (piece.color() == PieceColor::WHITE) {
-    // we must have taken, so check that new location is diagonal from
-    // cur_location.
-    ij up_to_left = cur_location + ij{.i = -1, .j = -1};
-    ij up_to_right = cur_location + ij{.i = -1, .j = 1};
-    return new_location == up_to_left || new_location != up_to_right;
-  } else {
-    // we must have taken, so check that new location is diagonal from
-    // cur_location.
-    ij down_to_left = cur_location + ij{.i = 1, .j = -1};
-    ij down_to_right = cur_location + ij{.i = 1, .j = 1};
-    return new_location == down_to_left || new_location != down_to_right;
-  }
-  return false;
-}
-} // namespace
 
 void Board::ErrorIfOob(ij ij) const {
   if (!inb(ij)) {
@@ -62,24 +11,6 @@ void Board::ErrorIfOob(ij ij) const {
     assert(false);
   }
 }
-
-// bool Board::MovedEnPassantLastTurn(Piece adjacent_piece,
-//                                    PieceColor adjacent_piece_color) const {
-//   if (adjacent_piece.type() != PieceType::PAWN) {
-//     return false;
-//   }
-//   if (adjacent_piece.color() != adjacent_piece_color) {
-//     return false;
-//   }
-//   if (adjacent_piece_color == PieceColor::BLACK) {
-//     return black_en_passant_.pawn.id() == adjacent_piece.id() &&
-//            black_en_passant_.moved_en_passant_last_turn;
-//   } else if (adjacent_piece_color == PieceColor::WHITE) {
-//     return white_en_passant_.pawn.id() == adjacent_piece.id() &&
-//            white_en_passant_.moved_en_passant_last_turn;
-//   }
-//   return false;
-// }
 
 bool Board::CanCaptureEnPassant(ij adjacent_square, Piece pawn) const {
   ErrorIfOob(adjacent_square);
@@ -252,6 +183,14 @@ Piece Board::GetPiece(ij ij) const {
   }
   // std::cout << "Getting piece at ij: " << ij << std::endl;
   return board_[ij.i][ij.j];
+}
+
+ij Board::GetKingLocation(PieceColor color) {
+  return piece_locations_.GetKingLocation(color);
+}
+
+std::vector<ij> Board::GetPieceLocations(PieceColor color) {
+  return piece_locations_.GetPieceLocations(color);
 }
 
 void Board::flip() {

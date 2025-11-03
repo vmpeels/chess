@@ -106,12 +106,7 @@ cc_library(
         ":ij",
         ":move",
         ":piece",
-        "//lib/move_generators:bishop_move_generator",
-        "//lib/move_generators:king_move_generator",
-        "//lib/move_generators:knight_move_generator",
-        "//lib/move_generators:pawn_move_generator",
-        "//lib/move_generators:queen_move_generator",
-        "//lib/move_generators:rook_move_generator",
+        "//lib/move_generators:move_generator_dispatch",
     ],
 )
 
